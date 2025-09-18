@@ -16,12 +16,15 @@ Route::get('/', function () {
 
 
 // Home routes for public booking
+Route::get('/fields', [HomeBookingController::class, 'index'])->name('home.fields.index');
 Route::middleware('auth')->group(function () {
     Route::get('/booking/create', [HomeBookingController::class, 'create'])->name('home.booking.create');
     Route::get('/my-bookings', [HomeBookingController::class, 'myBookings'])->name('bookings.my-bookings');
     Route::post('/booking', [HomeBookingController::class, 'store'])->name('home.bookings.store');
 });
+//productions
 Route::post('/midtrans/callback', [HomeBookingController::class, 'callback']);
+//dev
 Route::get('/payment/check/{bookingId}', [HomeBookingController::class, 'checkStatus']);
 
 

@@ -10,41 +10,6 @@
             </p>
         </div>
 
-        <!-- Search and Filter -->
-        <div class="bg-white rounded-2xl p-6 shadow-lg mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Cari Lapangan</label>
-                    <input type="text" placeholder="Nama lapangan..."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
-                    <select
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        <option>Semua Lokasi</option>
-                        <option>Jakarta Pusat</option>
-                        <option>Jakarta Utara</option>
-                        <option>Jakarta Selatan</option>
-                        <option>Jakarta Barat</option>
-                        <option>Jakarta Timur</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Olahraga</label>
-                    <select
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        <option>Semua Jenis</option>
-                        <option>Sepak Bola</option>
-                        <option>Basket</option>
-                        <option>Badminton</option>
-                        <option>Futsal</option>
-                        <option>Tenis</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
         <!-- Fields Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse(\App\Models\Field::take(6)->get() as $field)
@@ -86,7 +51,7 @@
                         </div>
 
                         <div class="mt-4 flex space-x-2">
-                            <a href="{{ route('login') }}"
+                            <a href="{{ route('home.booking.create', ['field_id' => $field->id]) }}"
                                 class="flex-1 bg-green-600 hover:bg-green-700 text-white text-center py-2 px-4 rounded-lg transition-colors duration-200 font-medium">
                                 Booking Sekarang
                             </a>
@@ -108,7 +73,7 @@
         <!-- View More Button -->
         @if (\App\Models\Field::count() > 6)
             <div class="text-center mt-12">
-                <a href="{{ route('login') }}"
+                <a href="{{ route('home.fields.index') }}"
                     class="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-600 to-blue-600 rounded-xl hover:from-green-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
                     <i class="fas fa-search mr-2"></i>
                     Lihat Semua Lapangan

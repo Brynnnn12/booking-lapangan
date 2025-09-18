@@ -21,10 +21,20 @@ class BookingController extends Controller
         $this->paymentService = $paymentService;
     }
 
-    public function create()
+    public function index()
+    {
+        $fields = Field::paginate(10);
+        return view('home.fields', compact('fields'));
+    }
+
+    public function create(Request $request)
     {
         $fields = Field::all();
-        return view('home.booking-create', compact('fields'));
+        $selectedField = null;
+        if ($request->has('field_id')) {
+            $selectedField = Field::find($request->field_id);
+        }
+        return view('home.booking-create', compact('fields', 'selectedField'));
     }
 
     public function myBookings()
@@ -33,7 +43,7 @@ class BookingController extends Controller
             ->where('user_id', Auth::id())
             ->get();
 
-        return view('home.bookings', compact('bookings'));
+        return view('home.bookings', compact('bookings'))->with('success', 'Berhasil memuat daftar booking Anda.');
     }
 
     public function store(StoreBookingRequest $request)
@@ -44,8 +54,25 @@ class BookingController extends Controller
         // Hitung durasi booking (jam)
         $duration = (strtotime($request->end_time) - strtotime($request->start_time)) / 3600;
 
+        if ($duration <= 0) {
+            return response()->json(['message' => 'Waktu booking tidak valid'], 400);
+        }
+
         // Hitung total harga
         $totalPrice = $duration * $field->price_per_hour;
+
+        // Cek bentrok booking
+        $existingBooking = Booking::where('field_id', $field->id)
+            ->where('booking_date', $request->booking_date)
+            ->where(function ($query) use ($request) {
+                $query->where('start_time', '<', $request->end_time)
+                    ->where('end_time', '>', $request->start_time);
+            })
+            ->first();
+
+        if ($existingBooking) {
+            return response()->json(['message' => 'Lapangan sudah dipesan pada waktu ini'], 400);
+        }
 
         // Simpan booking
         $booking = Booking::create([
@@ -76,6 +103,7 @@ class BookingController extends Controller
             'payment_id' => $payment->id,
         ]);
     }
+
 
     // Midtrans callback
     public function callback(Request $request)

@@ -14,12 +14,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -105,6 +104,9 @@
     <main class="py-12">
         {{ $slot }}
     </main>
+
+    <!-- Flash Messages -->
+    <x-feedback.flash-messages :errors="$errors ?? null" />
 
     <!-- Footer -->
     <x-home.footer />

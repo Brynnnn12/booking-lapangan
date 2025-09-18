@@ -17,7 +17,8 @@
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Pilih Lapangan</option>
                                 @foreach ($fields as $field)
-                                    <option value="{{ $field->id }}" data-price="{{ $field->price_per_hour }}">
+                                    <option value="{{ $field->id }}" data-price="{{ $field->price_per_hour }}"
+                                        {{ isset($selectedField) && $selectedField->id == $field->id ? 'selected' : '' }}>
                                         {{ $field->name }} - Rp {{ number_format($field->price_per_hour) }}/jam
                                     </option>
                                 @endforeach
@@ -171,7 +172,14 @@
                     },
                     body: formData
                 })
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) {
+                        return res.json().then(err => {
+                            throw new Error(err.message || 'Terjadi kesalahan');
+                        });
+                    }
+                    return res.json();
+                })
                 .then(data => {
                     btn.disabled = false;
                     btnText.textContent = "Booking Sekarang";
@@ -204,7 +212,7 @@
                     btn.disabled = false;
                     btnText.textContent = "Booking Sekarang";
                     spinner.classList.add("hidden");
-                    alert("Terjadi kesalahan, coba lagi.");
+                    alert(err.message || "Terjadi kesalahan, coba lagi.");
                 });
         });
 

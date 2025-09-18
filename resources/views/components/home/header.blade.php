@@ -9,7 +9,7 @@
                         class="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
                         <i class="fas fa-futbol text-white text-sm"></i>
                     </div>
-                    <span class="text-xl font-bold text-gray-900">BreezeShield</span>
+                    <span class="text-xl font-bold text-gray-900">Field</span>
                 </a>
             </div>
 
