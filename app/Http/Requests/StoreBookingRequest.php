@@ -26,8 +26,6 @@ class StoreBookingRequest extends FormRequest
             'booking_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'total_price' => 'required|numeric|min:0',
-            'status' => 'required|in:pending,confirmed,canceled',
         ];
     }
 
@@ -39,8 +37,6 @@ class StoreBookingRequest extends FormRequest
             'booking_date.required' => 'Tanggal pemesanan harus diisi.',
             'start_time.required' => 'Waktu mulai harus diisi.',
             'end_time.required' => 'Waktu selesai harus diisi.',
-            'total_price.required' => 'Harga total harus diisi.',
-            'status.required' => 'Status harus dipilih.',
         ];
     }
 }

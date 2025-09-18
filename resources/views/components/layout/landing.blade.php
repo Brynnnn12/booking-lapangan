@@ -17,6 +17,7 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -36,8 +37,12 @@
                     },
                     keyframes: {
                         float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-20px)' }
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px)'
+                            }
                         },
                         slideInUp: {
                             from: {
@@ -97,17 +102,9 @@
     <!-- Header -->
     <x-home.header />
 
-    <!-- Hero Section -->
-    <x-home.hero />
-
-    <!-- About Section -->
-    <x-home.about />
-
-    <!-- Fields Section -->
-    <x-home.fields />
-
-    <!-- Contact Section -->
-    <x-home.contact />
+    <main class="py-12">
+        {{ $slot }}
+    </main>
 
     <!-- Footer -->
     <x-home.footer />
@@ -115,7 +112,7 @@
     <script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {

@@ -46,19 +46,19 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="payment_status" class="block text-sm font-medium text-gray-700">Payment Status</label>
-                    <select name="payment_status" id="payment_status"
+                    <label for="status" class="block text-sm font-medium text-gray-700">Payment Status</label>
+                    <select name="status" id="status"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         required>
                         <option value="">Pilih Status</option>
-                        <option value="pending" {{ old('payment_status') == 'pending' ? 'selected' : '' }}>Pending
+                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending
                         </option>
-                        <option value="success" {{ old('payment_status') == 'success' ? 'selected' : '' }}>Success
+                        <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }}>Paid
                         </option>
-                        <option value="failed" {{ old('payment_status') == 'failed' ? 'selected' : '' }}>Failed
+                        <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed
                         </option>
                     </select>
-                    @error('payment_status')
+                    @error('status')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

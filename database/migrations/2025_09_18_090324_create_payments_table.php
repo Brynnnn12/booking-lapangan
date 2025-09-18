@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('booking_id')->constrained()->onDelete('cascade');
             $table->string('snap_token')->nullable();
             $table->decimal('amount', 10, 2);
-            $table->enum('payment_status', ['pending', 'success', 'failed'])->default('pending');
+            $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
             $table->timestamps();
         });
     }

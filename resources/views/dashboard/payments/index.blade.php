@@ -25,17 +25,17 @@
                         Rp {{ number_format($payment->amount, 0, ',', '.') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($payment->payment_status == 'pending')
+                        @if ($payment->status == 'pending')
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                 Pending
                             </span>
-                        @elseif($payment->payment_status == 'success')
+                        @elseif($payment->status == 'paid')
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                Success
+                                Paid
                             </span>
-                        @elseif($payment->payment_status == 'failed')
+                        @elseif($payment->status == 'failed')
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                 Failed
@@ -106,17 +106,17 @@
                             <h5 class="text-sm font-medium text-purple-900 mb-2 flex items-center">
                                 <i class="fas fa-info-circle mr-1"></i>Status
                             </h5>
-                            @if ($payment->payment_status == 'pending')
+                            @if ($payment->status == 'pending')
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                     Pending
                                 </span>
-                            @elseif($payment->payment_status == 'success')
+                            @elseif($payment->status == 'paid')
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Success
+                                    Paid
                                 </span>
-                            @elseif($payment->payment_status == 'failed')
+                            @elseif($payment->status == 'failed')
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                     Failed

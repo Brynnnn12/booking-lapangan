@@ -25,7 +25,7 @@ class StorePaymentRequest extends FormRequest
             'booking_id' => 'required|exists:bookings,id',
             'snap_token' => 'required|string',
             'amount' => 'required|numeric',
-            'payment_status' => 'required|string|in:pending,success,failed',
+            'status' => 'required|string|in:pending,paid,failed',
         ];
     }
 
@@ -37,8 +37,8 @@ class StorePaymentRequest extends FormRequest
             'snap_token.required' => 'Snap token harus diisi.',
             'amount.required' => 'Jumlah harus diisi.',
             'amount.numeric' => 'Jumlah harus berupa angka.',
-            'payment_status.required' => 'Status pembayaran harus dipilih.',
-            'payment_status.in' => 'Status pembayaran harus salah satu dari: pending, success, failed.',
+            'status.required' => 'Status pembayaran harus dipilih.',
+            'status.in' => 'Status pembayaran harus salah satu dari: pending, paid, failed.',
         ];
     }
 }

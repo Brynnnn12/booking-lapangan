@@ -20,6 +20,13 @@ class Booking extends Model
         'status',
     ];
 
+    protected $casts = [
+        'booking_date' => 'date',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
+        'total_price' => 'decimal:2',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -28,5 +35,21 @@ class Booking extends Model
     public function field()
     {
         return $this->belongsTo(Field::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    /**
+     * Get duration in hours
+     */
+    public function getDurationInHours(): float
+    {
+        $startTime = \Carbon\Carbon::createFromFormat('H:i', $this->start_time);
+        $endTime = \Carbon\Carbon::createFromFormat('H:i', $this->end_time);
+
+        return $startTime->diffInHours($endTime);
     }
 }

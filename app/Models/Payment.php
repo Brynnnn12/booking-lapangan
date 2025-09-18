@@ -14,9 +14,10 @@ class Payment extends Model
         'booking_id',
         'snap_token',
         'amount',
-        'payment_status'
+        'status'
     ];
-    public function bookings()
+
+    public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id');
     }
