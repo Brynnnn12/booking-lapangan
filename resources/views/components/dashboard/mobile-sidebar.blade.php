@@ -19,19 +19,49 @@
                             <span>Overview</span>
                         </a>
 
-                        <a href="{{ route('fields.index') }}"
-                            class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('todos.*') ? 'bg-blue-700' : '' }}"
-                            @click="isSidebarOpen = false">
-                            <i class="fas fa-list mr-3"></i>
-                            <span>Todos</span>
-                        </a>
+                        @if (Auth::user()->hasRole('Admin'))
+                            <a href="{{ route('fields.index') }}"
+                                class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('fields.*') ? 'bg-blue-700' : '' }}"
+                                @click="isSidebarOpen = false">
+                                <i class="fas fa-futbol mr-3"></i>
+                                <span>Lapangan</span>
+                            </a>
+
+                            <a href="{{ route('bookings.index') }}"
+                                class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('bookings.*') ? 'bg-blue-700' : '' }}"
+                                @click="isSidebarOpen = false">
+                                <i class="fas fa-calendar-alt mr-3"></i>
+                                <span>Booking</span>
+                            </a>
+
+                            <a href="{{ route('payments.index') }}"
+                                class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('payments.*') ? 'bg-blue-700' : '' }}"
+                                @click="isSidebarOpen = false">
+                                <i class="fas fa-credit-card mr-3"></i>
+                                <span>Pembayaran</span>
+                            </a>
+                        @else
+                            <a href="{{ route('bookings.index') }}"
+                                class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('bookings.*') ? 'bg-blue-700' : '' }}"
+                                @click="isSidebarOpen = false">
+                                <i class="fas fa-calendar-alt mr-3"></i>
+                                <span>Booking</span>
+                            </a>
+
+                            <a href="{{ route('payments.index') }}"
+                                class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('payments.*') ? 'bg-blue-700' : '' }}"
+                                @click="isSidebarOpen = false">
+                                <i class="fas fa-credit-card mr-3"></i>
+                                <span>Pembayaran</span>
+                            </a>
+                        @endif
+
                         <a href="{{ route('profile.edit') }}"
                             class="flex items-center p-3 rounded-lg mb-2 transition-all hover:bg-blue-700 {{ request()->routeIs('profile.*') ? 'bg-blue-700' : '' }}"
                             @click="isSidebarOpen = false">
                             <i class="fas fa-user mr-3"></i>
                             <span>Profile</span>
                         </a>
-
                     </nav>
                 </div>
             </div>

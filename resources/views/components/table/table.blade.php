@@ -18,13 +18,11 @@
                     @endforeach
                 </tr>
             </thead>
-        @endif
-
-        @isset($header)
+        @elseif(isset($header))
             <thead class="bg-gray-50">
                 {{ $header }}
             </thead>
-        @endisset
+        @endif
 
         <tbody class="bg-white divide-y divide-gray-200 {{ $striped ? '' : 'divide-y-0' }}">
             {{ $slot }}

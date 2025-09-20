@@ -9,17 +9,7 @@
         </x-slot>
 
         <!-- Bookings Table -->
-        <x-table.table :headers="[
-            'ID',
-            'User',
-            'Field',
-            'Tanggal',
-            'Waktu Mulai',
-            'Waktu Selesai',
-            'Total Harga',
-            'Status',
-            'Actions',
-        ]" striped hover>
+        <x-table.table :headers="['ID', 'User', 'Field', 'Tanggal', 'Waktu Mulai', 'Waktu Selesai', 'Total Harga', 'Status', 'Aksi']" striped hover>
             @forelse($bookings as $booking)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -78,105 +68,6 @@
                         </div>
                     </td>
                 </tr>
-
-                <!-- Sweet Confirm & Modal Components -->
-                <x-ui.sweet-confirm title="Hapus Booking?"
-                    text="Apakah Anda yakin ingin menghapus booking '{{ $booking->field->name }}' pada {{ $booking->booking_date->format('d M Y') }}? Aksi ini tidak bisa dibatalkan!"
-                    confirm-text="Ya, Hapus" cancel-text="Batal" icon="warning"
-                    action="{{ route('bookings.destroy', $booking) }}" method="DELETE" :params="['id' => $booking->id]" />
-
-                <x-ui.sweet-modal title="Detail Booking: {{ $booking->field->name }}"
-                    function-name="showBookingModal{{ $booking->id }}" width="600" :show-cancel-button="false"
-                    confirm-text="Tutup">
-                    <!-- Booking Header -->
-                    <div class="border-b border-gray-200 pb-4 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ $booking->field->name }}</h3>
-                        <div class="flex flex-wrap gap-3">
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                <i class="fas fa-user mr-2"></i>{{ $booking->user->name }}
-                            </span>
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-calendar-alt mr-2"></i>{{ $booking->booking_date->format('d M Y') }}
-                            </span>
-                            <span class="text-sm text-gray-500 flex items-center">
-                                <i class="fas fa-clock mr-1"></i>Dibuat:
-                                {{ $booking->created_at->format('d M Y') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Booking Details -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <h5 class="text-sm font-medium text-blue-900 mb-2 flex items-center">
-                                <i class="fas fa-clock mr-1"></i>Waktu Mulai
-                            </h5>
-                            <p class="text-blue-700 font-semibold">{{ $booking->start_time }}</p>
-                        </div>
-                        <div class="bg-purple-50 rounded-lg p-4">
-                            <h5 class="text-sm font-medium text-purple-900 mb-2 flex items-center">
-                                <i class="fas fa-clock mr-1"></i>Waktu Selesai
-                            </h5>
-                            <p class="text-purple-700 font-semibold">{{ $booking->end_time }}</p>
-                        </div>
-                        <div class="bg-green-50 rounded-lg p-4">
-                            <h5 class="text-sm font-medium text-green-900 mb-2 flex items-center">
-                                <i class="fas fa-money-bill-wave mr-1"></i>Total Harga
-                            </h5>
-                            <p class="text-green-700 font-semibold">Rp
-                                {{ number_format($booking->total_price, 0, ',', '.') }}</p>
-                        </div>
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h5 class="text-sm font-medium text-gray-900 mb-2 flex items-center">
-                                <i class="fas fa-info-circle mr-1"></i>Status
-                            </h5>
-                            @if ($booking->status == 'pending')
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    Pending
-                                </span>
-                            @elseif($booking->status == 'confirmed')
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Confirmed
-                                </span>
-                            @elseif($booking->status == 'canceled')
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                    Canceled
-                                </span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Field Info -->
-                    <div class="mb-6">
-                        <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Informasi Field
-                        </h4>
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <p class="text-gray-700"><strong>Lokasi:</strong> {{ $booking->field->location }}</p>
-                            <p class="text-gray-700"><strong>Harga per Jam:</strong> Rp
-                                {{ number_format($booking->field->price_per_hour, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="border-t border-gray-200 pt-4">
-                        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                            <button onclick="location.href='{{ route('bookings.edit', $booking) }}'"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                                <i class="fas fa-edit mr-2"></i>Edit Booking
-                            </button>
-                            <button onclick="Swal.close(); sweetConfirm{{ $booking->id }}()"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
-                                <i class="fas fa-trash mr-2"></i>Hapus Booking
-                            </button>
-                        </div>
-                    </div>
-                </x-ui.sweet-modal>
             @empty
                 <tr>
                     <td colspan="9" class="px-6 py-12 text-center">
@@ -193,6 +84,128 @@
                 </tr>
             @endforelse
         </x-table.table>
+
+        <!-- Sweet Confirm & Modal Components -->
+        @forelse($bookings as $booking)
+            <x-ui.sweet-confirm title="Hapus Booking?"
+                text="Apakah Anda yakin ingin menghapus booking '{{ $booking->field->name }}' pada {{ $booking->booking_date->format('d M Y') }}? Aksi ini tidak bisa dibatalkan!"
+                confirm-text="Ya, Hapus" cancel-text="Batal" icon="warning"
+                action="{{ route('bookings.destroy', $booking) }}" method="DELETE" :params="['id' => $booking->id]" />
+
+            <x-ui.sweet-modal title="Detail Booking: {{ $booking->field->name }}"
+                function-name="showBookingModal{{ $booking->id }}" width="600" :show-cancel-button="false"
+                confirm-text="Tutup">
+                <div class="space-y-4">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">{{ $booking->field->name }}</h3>
+                        <span class="text-sm text-gray-500">{{ $booking->created_at->format('d M Y') }}</span>
+                    </div>
+
+                    <!-- Booking Info -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-user text-blue-600"></i>
+                                <span class="text-sm font-medium text-gray-900">Pemesan</span>
+                            </div>
+                            <p class="text-blue-700 font-semibold">{{ $booking->user->name }}</p>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-calendar text-green-600"></i>
+                                <span class="text-sm font-medium text-gray-900">Tanggal</span>
+                            </div>
+                            <p class="text-green-700 font-semibold">{{ $booking->booking_date->format('d M Y') }}</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-clock text-purple-600"></i>
+                                <span class="text-sm font-medium text-gray-900">Waktu</span>
+                            </div>
+                            <p class="text-purple-700 font-semibold">{{ $booking->start_time }} -
+                                {{ $booking->end_time }}</p>
+                        </div>
+                        <div class="bg-yellow-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-money-bill-wave text-yellow-600"></i>
+                                <span class="text-sm font-medium text-gray-900">Total</span>
+                            </div>
+                            <p class="text-yellow-700 font-semibold">Rp
+                                {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i class="fas fa-info-circle text-gray-600"></i>
+                            <span class="text-sm font-medium text-gray-900">Status</span>
+                        </div>
+                        @if ($booking->status == 'pending')
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                <i class="fas fa-clock mr-1"></i>Pending
+                            </span>
+                        @elseif ($booking->status == 'confirmed')
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <i class="fas fa-check mr-1"></i>Confirmed
+                            </span>
+                        @elseif ($booking->status == 'cancelled')
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <i class="fas fa-times mr-1"></i>Cancelled
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Payment Info -->
+                    @if ($booking->payment)
+                        <div class="bg-indigo-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-credit-card text-indigo-600"></i>
+                                <span class="text-sm font-medium text-gray-900">Pembayaran</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Status:</span>
+                                @if ($booking->payment->status == 'paid')
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>Lunas
+                                    </span>
+                                @elseif ($booking->payment->status == 'pending')
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-clock mr-1"></i>Pending
+                                    </span>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        <i class="fas fa-times mr-1"></i>Gagal
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Actions -->
+                    <div class="flex gap-2 pt-3 border-t">
+                        @if ($booking->status == 'pending')
+                            <button onclick="location.href='{{ route('bookings.edit', $booking) }}'"
+                                class="flex-1 px-3 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                        @endif
+                        <button onclick="Swal.close(); sweetConfirm{{ $booking->id }}()"
+                            class="flex-1 px-3 py-2 border border-red-300 text-red-700 text-sm rounded-md hover:bg-red-50">
+                            <i class="fas fa-trash mr-1"></i>Hapus
+                        </button>
+                    </div>
+                </div>
+            </x-ui.sweet-modal>
+        @empty
+        @endforelse
 
         <!-- Pagination -->
         <div class="mt-6">

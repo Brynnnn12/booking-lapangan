@@ -16,7 +16,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::where('user_id', Auth::id())->paginate(10);
+        $bookings = Booking::with(['user', 'field', 'payment'])->where('user_id', Auth::id())->paginate(10);
         return view('dashboard.bookings.index', compact('bookings'));
     }
 

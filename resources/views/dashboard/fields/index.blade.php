@@ -10,11 +10,11 @@
 
 
         <!-- Fields Table -->
-        <x-table.table :headers="['ID', 'Nama', 'Lokasi', 'Harga/Jam', 'Foto', 'Actions']" striped hover>
+        <x-table.table :headers="['No', 'Nama', 'Lokasi', 'Harga/Jam', 'Foto', 'Aksi']" striped hover>
             @forelse($fields as $field)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ $field->id }}
+                        {{ $loop->iteration }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{ $field->name }}
@@ -50,86 +50,6 @@
                         </div>
                     </td>
                 </tr>
-
-                <!-- Sweet Confirm & Modal Components -->
-                <x-ui.sweet-confirm title="Hapus Field?"
-                    text="Apakah Anda yakin ingin menghapus field '{{ $field->name }}'? Aksi ini tidak bisa dibatalkan!"
-                    confirm-text="Ya, Hapus" cancel-text="Batal" icon="warning"
-                    action="{{ route('fields.destroy', $field) }}" method="DELETE" :params="['id' => $field->id]" />
-
-                <x-ui.sweet-modal title="Detail Field: {{ $field->name }}"
-                    function-name="showFieldModal{{ $field->id }}" width="600" :show-cancel-button="false"
-                    confirm-text="Tutup">
-                    <!-- Field Header -->
-                    <div class="border-b border-gray-200 pb-4 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ $field->name }}</h3>
-                        <div class="flex flex-wrap gap-3">
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                <i class="fas fa-map-marker-alt mr-2"></i>{{ $field->location }}
-                            </span>
-                            <span class="text-sm text-gray-500 flex items-center">
-                                <i class="fas fa-calendar-alt mr-1"></i>Dibuat:
-                                {{ $field->created_at->format('d M Y') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Field Price -->
-                    <div class="mb-6">
-                        <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-money-bill-wave mr-2 text-green-600"></i>Harga per Jam
-                        </h4>
-                        <div class="bg-green-50 rounded-lg p-4">
-                            <p class="text-2xl font-bold text-green-700">
-                                Rp {{ number_format($field->price_per_hour, 0, ',', '.') }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Field Photo -->
-                    @if ($field->photo)
-                        <div class="mb-6">
-                            <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
-                                <i class="fas fa-image mr-2 text-blue-600"></i>Foto Field
-                            </h4>
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <img src="{{ asset('storage/' . $field->photo) }}" alt="Field Photo"
-                                    class="w-full h-48 object-cover rounded-lg shadow-sm">
-                            </div>
-                        </div>
-                    @endif
-
-                    <!-- Field Meta Info -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <h5 class="text-sm font-medium text-blue-900 mb-2 flex items-center">
-                                <i class="fas fa-hashtag mr-1"></i>ID Field
-                            </h5>
-                            <p class="text-blue-700 font-semibold">#{{ $field->id }}</p>
-                        </div>
-                        <div class="bg-purple-50 rounded-lg p-4">
-                            <h5 class="text-sm font-medium text-purple-900 mb-2 flex items-center">
-                                <i class="fas fa-clock mr-1"></i>Terakhir Update
-                            </h5>
-                            <p class="text-purple-700">{{ $field->updated_at->format('d M Y H:i') }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="border-t border-gray-200 pt-4">
-                        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                            <button onclick="location.href='{{ route('fields.edit', $field) }}'"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                                <i class="fas fa-edit mr-2"></i>Edit Field
-                            </button>
-                            <button onclick="Swal.close(); sweetConfirm{{ $field->id }}()"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
-                                <i class="fas fa-trash mr-2"></i>Hapus Field
-                            </button>
-                        </div>
-                    </div>
-                </x-ui.sweet-modal>
             @empty
                 <tr>
                     <td colspan="6" class="px-6 py-12 text-center">
@@ -146,6 +66,83 @@
                 </tr>
             @endforelse
         </x-table.table>
+
+        <!-- Sweet Confirm & Modal Components -->
+        @forelse($fields as $field)
+            <x-ui.sweet-confirm title="Hapus Field?"
+                text="Apakah Anda yakin ingin menghapus field '{{ $field->name }}'? Aksi ini tidak bisa dibatalkan!"
+                confirm-text="Ya, Hapus" cancel-text="Batal" icon="warning"
+                action="{{ route('fields.destroy', $field) }}" method="DELETE" :params="['id' => $field->id]" />
+
+            <x-ui.sweet-modal title="Detail Field: {{ $field->name }}"
+                function-name="showFieldModal{{ $field->id }}" width="500" :show-cancel-button="false"
+                confirm-text="Tutup">
+                <div class="space-y-4">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">{{ $field->name }}</h3>
+                        <span class="text-sm text-gray-500">{{ $field->created_at->format('d M Y') }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-map-marker-alt text-blue-600"></i>
+                        <span class="text-sm text-gray-700">{{ $field->location }}</span>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i class="fas fa-money-bill-wave text-green-600"></i>
+                            <span class="text-sm font-medium text-gray-900">Harga per Jam</span>
+                        </div>
+                        <p class="text-xl font-bold text-green-700">Rp
+                            {{ number_format($field->price_per_hour, 0, ',', '.') }}</p>
+                    </div>
+
+                    <!-- Photo -->
+                    @if ($field->photo)
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fas fa-image text-blue-600"></i>
+                                <span class="text-sm font-medium text-gray-900">Foto Field</span>
+                            </div>
+                            <img src="{{ asset('storage/' . $field->photo) }}" alt="Field Photo"
+                                class="w-full h-32 object-cover rounded-lg">
+                        </div>
+                    @endif
+
+                    <!-- Meta -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-1 mb-1">
+                                <i class="fas fa-hashtag text-blue-600"></i>
+                                <span class="text-xs font-medium text-blue-900">ID</span>
+                            </div>
+                            <p class="text-blue-700 font-semibold">#{{ $field->id }}</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <div class="flex items-center gap-1 mb-1">
+                                <i class="fas fa-clock text-purple-600"></i>
+                                <span class="text-xs font-medium text-purple-900">Update</span>
+                            </div>
+                            <p class="text-purple-700 text-sm">{{ $field->updated_at->format('d M Y H:i') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Aksi -->
+                    <div class="flex gap-2 pt-3 border-t">
+                        <button onclick="location.href='{{ route('fields.edit', $field) }}'"
+                            class="flex-1 px-3 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
+                            <i class="fas fa-edit mr-1"></i>Edit
+                        </button>
+                        <button onclick="Swal.close(); sweetConfirm{{ $field->id }}()"
+                            class="flex-1 px-3 py-2 border border-red-300 text-red-700 text-sm rounded-md hover:bg-red-50">
+                            <i class="fas fa-trash mr-1"></i>Hapus
+                        </button>
+                    </div>
+                </div>
+            </x-ui.sweet-modal>
+        @empty
+        @endforelse
 
         <!-- Pagination -->
         <div class="mt-6">

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 font-sans" x-data="{ isSidebarOpen: false }">
+<body class="bg-gray-100 font-sans" x-data="{ isSidebarOpen: false, activeTab: '{{ $title ?? 'Dashboard' }}' }">
     <div class="flex h-screen">
         <!-- Sidebar -->
         <x-dashboard.sidebar />

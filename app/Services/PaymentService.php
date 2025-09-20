@@ -17,9 +17,12 @@ class PaymentService
 
     public function createSnapToken($booking, $user)
     {
+        // Buat order_id unik dengan kombinasi booking_id dan timestamp
+        $orderId = $booking->id . '-' . time() . '-' . rand(100, 999);
+
         $params = [
             'transaction_details' => [
-                'order_id'     => $booking->id,          // langsung pakai booking_id
+                'order_id'     => $orderId,
                 'gross_amount' => $booking->total_price,
             ],
             'customer_details' => [

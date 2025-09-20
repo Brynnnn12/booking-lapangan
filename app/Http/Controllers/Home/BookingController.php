@@ -108,9 +108,11 @@ class BookingController extends Controller
     // Midtrans callback
     public function callback(Request $request)
     {
-        $bookingId = $request->order_id; // order_id = booking_id
+        $orderId = $request->order_id;
         $transactionStatus = $request->transaction_status;
 
+        // Ekstrak booking_id dari order_id (format: booking_id-timestamp-random)
+        $bookingId = explode('-', $orderId)[0];
 
         $booking = Booking::find($bookingId);
         if (! $booking) {

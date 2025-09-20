@@ -16,7 +16,7 @@ class PaymentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Payment::class);
-        $payments = Payment::with(['bookings.user', 'bookings.field'])->paginate(10);
+        $payments = Payment::with(['booking.user', 'booking.field'])->paginate(10);
         return view('dashboard.payments.index', compact('payments'));
     }
 

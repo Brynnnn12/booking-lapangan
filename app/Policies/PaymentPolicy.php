@@ -53,7 +53,7 @@ class PaymentPolicy
      */
     public function restore(User $user, Payment $payment): bool
     {
-        return $user->hasRole('Admin');
+        return $user->hasRole('Admin', '');
     }
 
     /**

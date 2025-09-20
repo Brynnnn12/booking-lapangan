@@ -13,6 +13,7 @@ class Field extends Model
     protected $fillable = [
         'name',
         'location',
+        'type',
         'price_per_hour',
         'photo',
     ];
