@@ -22,8 +22,8 @@ class Booking extends Model
 
     protected $casts = [
         'booking_date' => 'date',
-        'start_time' => 'datetime:H:i',
-        'end_time' => 'datetime:H:i',
+        'start_time' => 'string',
+        'end_time' => 'string',
         'total_price' => 'decimal:2',
     ];
 
@@ -47,9 +47,27 @@ class Booking extends Model
      */
     public function getDurationInHours(): float
     {
-        $startTime = \Carbon\Carbon::createFromFormat('H:i', $this->start_time);
-        $endTime = \Carbon\Carbon::createFromFormat('H:i', $this->end_time);
+        try {
+            // Handle different time formats
+            $startTimeStr = is_string($this->start_time) ? $this->start_time : $this->start_time->format('H:i');
+            $endTimeStr = is_string($this->end_time) ? $this->end_time : $this->end_time->format('H:i');
 
-        return $startTime->diffInHours($endTime);
+            $startTime = \Carbon\Carbon::createFromFormat('H:i', $startTimeStr);
+            $endTime = \Carbon\Carbon::createFromFormat('H:i', $endTimeStr);
+
+            return $startTime->diffInHours($endTime);
+        } catch (\Exception $e) {
+            // Fallback: calculate duration manually
+            $startParts = explode(':', $this->start_time);
+            $endParts = explode(':', $this->end_time);
+
+            if (count($startParts) === 2 && count($endParts) === 2) {
+                $startMinutes = (int)$startParts[0] * 60 + (int)$startParts[1];
+                $endMinutes = (int)$endParts[0] * 60 + (int)$endParts[1];
+                return round(($endMinutes - $startMinutes) / 60, 2);
+            }
+
+            return 1.0; // Default fallback
+        }
     }
 }

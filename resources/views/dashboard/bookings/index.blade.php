@@ -57,6 +57,10 @@
                                 onclick="showBookingModal{{ $booking->id }}()">
                                 View
                             </x-ui.button>
+                            <x-ui.button size="xs" variant="success" icon="fas fa-print"
+                                onclick="window.open('{{ route('bookings.receipt', $booking) }}', '_blank')">
+                                Print
+                            </x-ui.button>
                             <x-ui.button size="xs" variant="outline" icon="fas fa-edit"
                                 onclick="location.href='{{ route('bookings.edit', $booking) }}'">
                                 Edit
@@ -191,6 +195,10 @@
 
                     <!-- Actions -->
                     <div class="flex gap-2 pt-3 border-t">
+                        <button onclick="window.open('{{ route('bookings.receipt', $booking) }}', '_blank')"
+                            class="flex-1 px-3 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700">
+                            <i class="fas fa-print mr-1"></i>Cetak Struk
+                        </button>
                         @if ($booking->status == 'pending')
                             <button onclick="location.href='{{ route('bookings.edit', $booking) }}'"
                                 class="flex-1 px-3 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">

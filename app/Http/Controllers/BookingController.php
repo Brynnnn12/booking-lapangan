@@ -7,6 +7,8 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class BookingController extends Controller
 {
@@ -75,5 +77,43 @@ class BookingController extends Controller
         $this->authorize('delete', $booking);
         $booking->delete();
         return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully.');
+    }
+
+    /**
+     * Generate PDF receipt for booking
+     */
+    public function generateReceipt(Booking $booking)
+    {
+        $this->authorize('view', $booking);
+
+        // Load booking with relationships
+        $booking->load(['user', 'field', 'payment']);
+
+        // Generate barcode
+        try {
+            $generator = new BarcodeGeneratorPNG();
+            $barcodeData = str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $barcode = '<img src="data:image/png;base64,' . base64_encode($generator->getBarcode($barcodeData, $generator::TYPE_CODE_128)) . '" alt="Barcode" style="width: 200px; height: 50px;">';
+        } catch (\Exception $e) {
+            // Fallback barcode as text
+            $barcode = '<div style="text-align: center; font-family: monospace; font-size: 14px; padding: 10px; border: 1px solid #ccc;">' . str_pad($booking->id, 6, '0', STR_PAD_LEFT) . '</div>';
+        }
+
+        // Generate PDF
+        try {
+            $pdf = Pdf::loadView('pdf.booking-receipt', compact('booking', 'barcode'))
+                ->setPaper('a4', 'portrait')
+                ->setOptions([
+                    'defaultFont' => 'DejaVu Sans',
+                    'isHtml5ParserEnabled' => true,
+                    'isRemoteEnabled' => false
+                ]);
+
+            return $pdf->download('struk-booking-' . $booking->id . '.pdf');
+        } catch (\Exception $e) {
+            // Fallback: return simple HTML response
+            return response()->view('pdf.booking-receipt', compact('booking', 'barcode'))
+                ->header('Content-Type', 'text/html');
+        }
     }
 }
